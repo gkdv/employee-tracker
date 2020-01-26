@@ -1,4 +1,4 @@
-// const inquirer = requirer('inquirer');
+
 const mysql = require('mysql');
 
 
