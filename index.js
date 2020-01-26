@@ -13,8 +13,36 @@ const connection = mysql.createConnection({
 
 connection.connect(err => {
     if (err) throw err;
-
     console.log(`Connected as id ${connection.threadId}`);
-    
-    connection.end();
+    createEmployee();
+    viewAll();
 })
+
+function viewAll() {
+    connection.query("SELECT * FROM employee", function(err, res) {
+      if (err) throw err;
+      console.log(res);
+      connection.end();
+    });
+  }
+
+  function createEmployee() {
+    console.log('Inserting a new employee...\n');
+    var query = connection.query(
+        'INSERT INTO employee SET ?',
+        [{
+            first_name: 'garrett',
+            last_name: 'krage',
+            title: 'mySQL developer',
+            department: 'developement',
+            salary: '60000',
+            manager: 'Chris Farley'
+        }],
+        function (err, res){
+            if (err) throw err;
+            console.log(res.affectedRows + ' employee inserted!\n');
+            // updateProduct();
+        }
+    )
+}
+  
