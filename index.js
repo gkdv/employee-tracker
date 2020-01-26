@@ -15,6 +15,7 @@ connection.connect(err => {
     if (err) throw err;
     console.log(`Connected as id ${connection.threadId}`);
     createEmployee();
+    deleteEmployee();
     viewAll();
 })
 
@@ -45,4 +46,18 @@ function viewAll() {
         }
     )
 }
+
+function deleteEmployee() {
+    console.log("Deleting Employee...\n");
+    connection.query(
+      "DELETE FROM employee WHERE ?",
+      {
+        first_name: "garrett"
+      },
+      function(err, res) {
+        if (err) throw err;
+        console.log(res.affectedRows + " employee deleted!\n");
+      }
+    );
+  }
   
