@@ -22,17 +22,17 @@ const commence = () => {
     inquirer
         .prompt([
             {
-                type: "list"
-                , name: "init"
-                , message: "What would you like to do?"
-                , choices: [
-                    "View All Employees"
-                    , "View Employees by Department"
-                    , "View Employees by Role"
-                    , "Add an Employee"
-                    , "Update an Employee's Role"
-                    , "Remove an Employee"
-                    , "Exit"
+                type: "list",
+                name: "init",
+                message: "What would you like to do?",
+                choices: [
+                    "View All Employees",
+                    "View Employees by Department",
+                    "View Employees by Role",
+                    "Add an Employee",
+                    "Update an Employee's Role",
+                    "Remove an Employee",
+                    "Exit"
                 ]
             }
         ]).then((answer) => {
@@ -71,10 +71,10 @@ const viewDeparments = () => {
             inquirer
                 .prompt([
                     {
-                        name: "choice"
-                        , type: "list"
-                        , message: "Which Department would you like to view?"
-                        , choices: () => {
+                        name: "choice",
+                        type: "list",
+                        message: "Which Department would you like to view?",
+                        choices: () => {
                             var selections = [];
                             for (const item of res) {
                                 selections.push(item.name)
@@ -85,11 +85,11 @@ const viewDeparments = () => {
                 ]).then(data => {
                     const query = "SELECT employee.id, employee.first_name, employee.last_name, role.title , department.name, role.salary FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id WHERE ?;"
                     connection.query(
-                        query
-                        , [{
+                        query,
+                        [{
                             "department.name": data.choice
-                        }]
-                        , (err, res) => {
+                        }],
+                        (err, res) => {
                             if (err) throw err;
                             console.table(res)
                             commence();
@@ -98,32 +98,32 @@ const viewDeparments = () => {
         });
 }
 
-// show a list of joined employeed after it is selected
+// list of joined employees
 const viewEmployees = () => {
     const query = "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id;"
     connection.query(
-        query
-        , (err, res) => {
+        query,
+        (err, res) => {
             if (err) throw err;
             console.table(res);
             commence();
         });
 };
 
-// select employee roles from the role table 
+// function for select an employee
 const employeeRoles = () => {
     const query = "SELECT * FROM role;"
     connection.query(
-        query
-        , (err, res) => {
+        query,
+        (err, res) => {
             if (err) throw err;
             inquirer
                 .prompt([
                     {
-                        name: "choice"
-                        , type: "list"
-                        , message: "Which employee role would you like to review?"
-                        , choices: () => {
+                        name: "choice",
+                        type: "list",
+                        message: "Which employee role would you like to review?",
+                        choices: () => {
                             var selections = [];
                             for (const item of res) {
                                 selections.push(item.title)
@@ -134,11 +134,11 @@ const employeeRoles = () => {
                 ]).then(data => {
                     const query = "SELECT employee.id, employee.first_name, employee.last_name, role.title , department.name, role.salary FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id WHERE ?;"
                     connection.query(
-                        query
-                        , [{
+                        query,
+                        [{
                             "role.title": data.choice
-                        }]
-                        , (err, res) => {
+                        }],
+                        (err, res) => {
                             if (err) throw err;
                             console.table(res)
                             commence();
@@ -147,36 +147,36 @@ const employeeRoles = () => {
         });
 }
 
-// adding a new employee and subsequently choosing their position 
+// function adding a new employee
 const newEmployee = () => {
     inquirer
         .prompt([
             {
-                name: "first"
-                , type: "input"
-                , message: "What is the employee's first name?"
+                name: "first",
+                type: "input",
+                message: "What is the employee's first name?"
             },
             {
-                name: "last"
-                , type: "input"
-                , message: "What is the employee's last name?"
+                name: "last",
+                type: "input",
+                message: "What is the employee's last name?"
             },
             {
-                name: "choice"
-                , type: "list"
-                , message: "What is this employee's title?"
-                , choices: [
-                    "President"
-                    , "VP"
-                    , "COO"
-                    , "Sales Manager"
-                    , "Salesman"
-                    , "Consultant"
-                    , "Accountant"
-                    , "Legal Manager"
-                    , "Attorney"
-                    , "Engineer"
-                    , "Software Engineer"
+                name: "choice",
+                type: "list",
+                message: "What is this employee's title?",
+                choices: [
+                    "President",
+                    "VP",
+                    "COO",
+                    "Sales Manager",
+                    "Salesman",
+                    "Consultant",
+                    "Accountant",
+                    "Legal Manager",
+                    "Attorney",
+                    "Engineer",
+                    "Software Engineer"
                 ]
             }
         ]).then(data => {
@@ -219,13 +219,13 @@ const newEmployee = () => {
 
             const query = "INSERT INTO employee SET ?;"
             connection.query(
-                query
-                , {
-                    first_name: data.first
-                    , last_name: data.last
-                    , role_id: roleID
-                }
-                , (err) => {
+                query,
+                {
+                    first_name: data.first,
+                    last_name: data.last,
+                    role_id: roleID
+                },
+                (err) => {
                     if (err) throw err;
                     console.log("Success! Employee was added.")
                     commence();
@@ -233,20 +233,20 @@ const newEmployee = () => {
         });
 };
 
-// update an employee - choose employee and title to update
+// function for updating an employee
 const changeEmployee = () => {
     const query = "SELECT CONCAT(first_name, ' ', last_name) as name FROM employee;"
     connection.query(
-        query
-        , (err, res) => {
+        query,
+        (err, res) => {
             if (err) throw err;
             inquirer
                 .prompt([
                     {
-                        type: "list"
-                        , message: "Which Employee would you like to update?"
-                        , name: "choiceEmployee"
-                        , choices: () => {
+                        type: "list",
+                        message: "Which Employee would you like to update?",
+                        name: "choiceEmployee",
+                        choices: () => {
                             var selections = [];
                             for (const item of res) {
                                 selections.push(item.name);
@@ -255,21 +255,21 @@ const changeEmployee = () => {
                         }
                     },
                     {
-                        name: "choice"
-                        , type: "list"
-                        , message: "What is this employee's title?"
-                        , choices: [
-                            "President"
-                            , "VP"
-                            , "COO"
-                            , "Sales Manager"
-                            , "Salesman"
-                            , "Consultant"
-                            , "Accountant"
-                            , "Legal Manager"
-                            , "Attorney"
-                            , "Engineer"
-                            , "Software Engineer"
+                        name: "choice",
+                        type: "list",
+                        message: "What is this employee's title?",
+                        choices: [
+                            "President",
+                            "VP",
+                            "COO",
+                            "Sales Manager",
+                            "Salesman",
+                            "Consultant",
+                            "Accountant",
+                            "Legal Manager",
+                            "Attorney",
+                            "Engineer",
+                            "Software Engineer"
                         ]
                     }
                 ]).then(data => {
@@ -313,8 +313,8 @@ const changeEmployee = () => {
                     emplast = emp[1];
                     const query = "UPDATE employee SET ? WHERE ? AND ?";
                     connection.query(
-                        query
-                        , [
+                        query,
+                        [
                             {
                                 role_id: roleID
                             },
@@ -324,8 +324,8 @@ const changeEmployee = () => {
                             {
                                 last_name: emplast
                             }
-                        ]
-                        , (err) => {
+                        ],
+                        (err) => {
                             if (err) throw err;
                             console.log("Updated employee records.");
                             commence();
@@ -334,20 +334,20 @@ const changeEmployee = () => {
         });
 };
 
-// delete an employee, select and delete employee by name
+// function for deleting an employee
 const removeEmployee = () => {
     const query = "SELECT CONCAT(first_name, ' ', last_name) as name FROM employee;"
     connection.query(
-        query
-        , (err, res) => {
+        query,
+        (err, res) => {
             if (err) throw err;
             inquirer
                 .prompt(
                     {
-                        type: "list"
-                        , message: "Which employee would you like to remove?"
-                        , name: "choiceEmployee"
-                        , choices: () => {
+                        type: "list",
+                        message: "Which employee would you like to remove?",
+                        name: "choiceEmployee",
+                        choices: () => {
                             var selections = [];
                             for (const item of res) {
                                 selections.push(item.name);
@@ -361,16 +361,16 @@ const removeEmployee = () => {
                     emplast = emp[1];
                     const query = "DELETE FROM employee WHERE ? AND ?";
                     connection.query(
-                        query
-                        , [
+                        query,
+                        [
                             {
                                 first_name: empfirst
                             },
                             {
                                 last_name: emplast
                             }
-                        ]
-                        , (err) => {
+                        ],
+                        (err) => {
                             if (err) throw err;
                             console.log("Employee deleted from the database!");
                             commence();
